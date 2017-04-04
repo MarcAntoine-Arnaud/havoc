@@ -1,32 +1,34 @@
-language: generic
+language: cpp
 
-addons:
-  apt:
-    sources:
-      - ubuntu-toolchain-r-test
-    packages:
-      - g++-5
-
-cache:
-  directories:
-    - $HOME/sde-external-7.31.0-2015-09-25-lin
-
-before_script:
-  - cp get-intel-sde $HOME
-  - pushd $HOME
-  - if [ -f "sde-external-7.31.0-2015-09-25-lin/sde64" ]; then echo "using cached SDE"; fi
-  - if [ ! -f "sde-external-7.31.0-2015-09-25-lin/sde64" ]; then wget http://pypi.python.org/packages/source/m/mechanize/mechanize-0.2.5.tar.gz; fi
-  - if [ ! -f "sde-external-7.31.0-2015-09-25-lin/sde64" ]; then tar xf mechanize-0.2.5.tar.gz && mv mechanize-0.2.5 mechanize; fi
-  - if [ ! -f "sde-external-7.31.0-2015-09-25-lin/sde64" ]; then ./get-intel-sde sde-external-7.31.0-2015-09-25-lin.tar.bz2 && tar xjf sde-external-7.31.0-2015-09-25-lin.tar.bz2; fi
-  - ls -R sde-external-7.31.0-2015-09-25-lin
-  - export PATH=$PATH:$HOME/sde-external-7.31.0-2015-09-25-lin
-  - popd
+matrix:
+  include:
+    - compiler: gcc
+      env: CMAKE_CXX_COMPILER=g++-5 CMAKE_C_COMPILER=gcc-5
+      os: linux
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-5
+    - compiler: clang
+      env: CMAKE_CXX_COMPILER=clang++ CMAKE_CXX_COMPILER=clang
+      os: linux
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-5
+    - compiler: clang
+      env: CMAKE_CXX_COMPILER=/usr/bin/clang++ CMAKE_C_COMPILER=/usr/bin/clang
+      os: osx
+    - compiler: gcc
+      env: CMAKE_CXX_COMPILER=/usr/bin/g++ CMAKE_C_COMPILER=/usr/bin/gcc
+      os: osx
 
 script:
   - mkdir build
   - cd build
-  - cmake -DCMAKE_CXX_COMPILER=g++-5 -DCMAKE_C_COMPILER=gcc-5 ..
+  - cmake -DCMAKE_CXX_COMPILER=$CMAKE_CXX_COMPILER -DCMAKE_C_COMPILER=$CMAKE_C_COMPILER ../
   - make
-  - sde64 -nhm -- ./havoc-exe --no-measure-speed
-  - sde64 -hsw -- ./havoc-exe --no-measure-speed
-
