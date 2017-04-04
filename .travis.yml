@@ -12,15 +12,6 @@ matrix:
           packages:
             - g++-5
     - compiler: clang
-      env: CMAKE_CXX_COMPILER=clang++ CMAKE_CXX_COMPILER=clang
-      os: linux
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-          packages:
-            - g++-5
-    - compiler: clang
       env: CMAKE_CXX_COMPILER=/usr/bin/clang++ CMAKE_C_COMPILER=/usr/bin/clang
       os: osx
     - compiler: gcc
