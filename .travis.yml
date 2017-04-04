@@ -8,6 +8,13 @@ compiler:
   - gcc
   - clang
 
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - g++-5
+
 matrix:
   include:
     - compiler: gcc
@@ -20,12 +27,7 @@ matrix:
       env: CMAKE_CXX_COMPILER=/usr/bin/clang++ CMAKE_C_COMPILER=/usr/bin/clang
       os: osx
 
-# addons:
-#   apt:
-#     sources:
-#       - ubuntu-toolchain-r-test
-#     packages:
-#       - g++-5
+
 
 # cache:
 #   directories:
