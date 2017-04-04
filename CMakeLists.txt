@@ -16,10 +16,10 @@ if (MSVC)
 	endforeach(flag_var)
 endif (MSVC)
 
-if (CMAKE_COMPILER_IS_GNUCC)
+if (CMAKE_COMPILER_IS_GNUCC OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 	set(GCC_COMPILE_FLAGS "-fno-operator-names -std=c++0x -O3")
 	set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} ${GCC_COMPILE_FLAGS}")
-endif (CMAKE_COMPILER_IS_GNUCC	)
+endif (CMAKE_COMPILER_IS_GNUCC OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 
 add_library (havoc
 	diff.h
@@ -46,9 +46,12 @@ add_library (havoc
 	README.md
 )
 
+set_property(TARGET havoc PROPERTY CXX_STANDARD 11)
+
 add_executable(havoc-exe
 	main.cpp
 )
+set_property(TARGET havoc-exe PROPERTY CXX_STANDARD 11)
 
 target_link_libraries(havoc-exe havoc)
 
